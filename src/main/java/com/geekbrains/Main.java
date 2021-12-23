@@ -2,7 +2,7 @@ package com.geekbrains;
 
 import java.util.Arrays;
 
-public class HomeWorkApp {
+public class Main {
     public static void main(String[] args) {      // ДЗ 3 урок
         task1();
         sout();
