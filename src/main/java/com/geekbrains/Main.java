@@ -1,9 +1,157 @@
 package com.geekbrains;
 
-import java.util.Arrays;
+import java.util.Random;
+import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {      // ДЗ 3 урок
+    private final static int SIZE = 3;
+    private final static char DOT_EMPTY = '.';
+    private final static char DOT_X = 'X';
+    private final static char DOT_0 = '0';
+    private final static char [] [] MAP = new char[SIZE][SIZE];
+    private final static Scanner SCANNER = new Scanner(System.in);
+    private final static Random RANDOM = new Random();
+
+    public static void main(String[] args) {
+        initMap();
+        printMap();
+        while (true) {
+            humanTurn();
+            printMap();
+            if(checkWin(DOT_X)) {
+                System.out.println("Победил человек");
+                break;
+            }
+
+            if(isMapFull()) {
+                System.out.println("Ничья");
+                break;
+            }
+
+            aiTurn();
+            printMap();
+            if(checkWin(DOT_0)) {
+                System.out.println("Победил ИИ");
+                break;
+            }
+
+            if(isMapFull()) {
+                System.out.println("Ничья");
+                break;
+            }
+    }
+
+    System.out.println("Игра окончена");
+    SCANNER.close();
+}
+
+    private static boolean checkWin(char symbol) {
+        for (int i = 0; i < SIZE; i++) {
+            if (MAP[i][0] == symbol && MAP[i][1] == symbol && MAP[i][2] == symbol)
+                return true;
+        }
+        for (int i = 0; i < SIZE; i++) {
+            if (MAP[0][i] == symbol && MAP[1][i] == symbol && MAP[2][i] == symbol)
+                return true;
+        }
+            if (MAP[0][0] == symbol && MAP[1][1] == symbol && MAP[2][2] == symbol)
+                return true;
+            if (MAP[0][2] == symbol && MAP[1][1] == symbol && MAP[2][0] == symbol)
+                return true;
+
+        return false;
+        }
+
+
+
+
+/*        if (MAP [0] [0] == symbol && MAP[0][1] == symbol && MAP [0][2] == symbol)
+            return true;
+        if (MAP [1] [0] == symbol && MAP[1][1] == symbol && MAP [1][2] == symbol)
+        return true;
+        if (MAP [2] [0] == symbol && MAP[2][1] == symbol && MAP [2][2] == symbol)
+        return true;
+        if (MAP [0] [0] == symbol && MAP[1][0] == symbol && MAP [2][0] == symbol)
+        return true;
+        if (MAP [0] [1] == symbol && MAP[1][1] == symbol && MAP [2][1] == symbol)
+        return true;
+        if (MAP [0] [2] == symbol && MAP[1][2] == symbol && MAP [2][2] == symbol)
+            return true;
+        if (MAP [0] [0] == symbol && MAP[1][1] == symbol && MAP [2][2] == symbol)
+            return true;
+        if (MAP [2] [0] == symbol && MAP[1][1] == symbol && MAP [0][2] == symbol)
+            return true;
+
+        return false;
+
+    }*/
+
+    private static boolean isMapFull() {
+        for (int i = 0; i < SIZE; i++){
+            for (int j = 0; j < SIZE; j++) {
+                if (MAP[i][j] == DOT_EMPTY) {
+                    return false;
+                }
+            }
+        }
+        return true;
+
+    }
+
+    private static void aiTurn() {
+        int x;
+        int y;
+        do {
+            x = RANDOM.nextInt(SIZE);
+            y = RANDOM.nextInt(SIZE);
+        } while (!isCellValid(x,y));
+        System.out.println("ИИ ходил в точку " + (x + 1) + ";" + (y + 1));
+        MAP[y][x] = DOT_0;
+    }
+
+    private static boolean isCellValid(int x, int y) {
+        if (x < 0 || x >= SIZE || y < 0 || y >= SIZE) {
+            return false;
+        }
+        return MAP [y][x] ==DOT_EMPTY;
+    }
+
+    private static void humanTurn() {
+        int x;
+        int y;
+
+        do {
+            System.out.println("Введите число в формате X и Y");
+            x = SCANNER.nextInt() - 1;
+            y = SCANNER.nextInt() - 1;
+        } while(!isCellValid(x, y));
+
+        MAP[y][x] = DOT_X;
+    }
+
+    private static void initMap() {
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                MAP[i][j] = DOT_EMPTY;
+            }
+        }
+    }
+
+    private static void printMap() {
+        for (int i = 0; i <=  SIZE; i++) {
+            System.out.print (i + " ");
+        }
+        System.out.println();
+        for (int i = 0; i < SIZE; i++) {
+            System.out.print((i + 1) + " ");
+            for (int j = 0; j < SIZE; j++) {
+                System.out.print(MAP[i][j] + " ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
+   /* public static void main(String[] args) {      // ДЗ 3 урок
         task1();
         sout();
         sout();
@@ -111,13 +259,13 @@ public class Main {
     public static void task8(){
 
     }
-
+*/
 /*    public static void main(String[] args) {    // ДЗ 2 урок
         System.out.println(task1(10,10));
-        task2();
+        System.out.println(task2(5));
         System.out.println(task3(-15));
         System.out.println();
-        task4();
+        System.out.println(task4(7));
         System.out.println();
 
     }
@@ -129,8 +277,7 @@ public class Main {
 
     }
 
-    public static void task2() {
-        int a = 15;
+    public static void task2(int a) {
         if (a >= 0 ) {
             System.out.println("Положительное число");
         } else System.out.println("Отрицательное");
@@ -143,8 +290,7 @@ public class Main {
 
     }
 
-    public static void task4() {
-        int a = 7;
+    public static void task4(int a) {
         String text = "Печатать";
         System.out.println("Слово " + text + " должно расчпечататься " + a + " раз");
         for (int i = 0 ; i < a; i++ ){
